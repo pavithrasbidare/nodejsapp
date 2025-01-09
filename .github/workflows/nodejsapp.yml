@@ -1,0 +1,36 @@
+name: Build and Store Node.js Application Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install Dependencies
+      run: |
+        npm install
+
+    - name: Build Application
+      run: |
+        npm run build
+
+    - name: Package Application
+      run: |
+        mkdir -p artifacts
+        cp dist/* artifacts/node_app.zip
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: node-application-artifact
+        path: artifacts/node_app.zip
