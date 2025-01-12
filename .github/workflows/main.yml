@@ -1,0 +1,50 @@
+name: Matrix Example Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-matrix:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14, 16] 
+        os: [ubuntu-latest, windows-latest] 
+        include: 
+          - os: ubuntu-latest
+            node-version: 20
+      fail-fast: false 
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Display Configuration
+        run: |
+          echo "Running on OS: ${{ matrix.os }}"
+          echo "Using Node.js version: ${{ matrix.node-version }}"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+  deploy-matrix:
+    needs: test-matrix
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        environment: [staging, production]
+
+    steps:
+      - name: Deploy to ${{ matrix.environment }}
+        run: |
+          echo "Deploying to ${{ matrix.environment }} environment"
