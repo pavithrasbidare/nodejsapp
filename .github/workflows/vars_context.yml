@@ -6,6 +6,8 @@ on:
 jobs:
   use-repo-variables:
     runs-on: ubuntu-latest
+    env:
+          MY_API_KEY: ${{ vars.API_KEY }}
 
     steps:
       - name: Checkout Code
@@ -13,19 +15,18 @@ jobs:
 
       - name: Access Repository Variables
         run: |
-          echo "The value of MY_API_KEY is: ${{ vars.MY_API_KEY }}"
-          echo "The application environment is: ${{ vars.APP_ENV }}"
+          echo "The value of MY_API_KEY is: ${{ vars.API_KEY }}"
 
       - name: Use Variables in a Script
         run: |
           if [ "${{ vars.APP_ENV }}" == "production" ]; then
-            echo "Deploying to production with API key: ${{ vars.MY_API_KEY }}"
+            echo "Deploying to production with API key: ${{ vars.API_KEY }}"
           else
             echo "Running in development mode."
           fi
 
       - name: Mask Sensitive Variables
         env:
-          MY_API_KEY: ${{ vars.MY_API_KEY }}
+          MY_API_KEY: ${{ vars.API_KEY }}
         run: |
-          echo "Sensitive API Key: $MY_API_KEY"
+          echo "Sensitive API Key: $API_KEY"
