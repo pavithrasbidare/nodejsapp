@@ -1,0 +1,36 @@
+name: GitHub Contexts with Env Variables Demo
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  env-context-demo:
+    runs-on: ubuntu-latest
+
+    env:
+      GLOBAL_VAR: "test"
+      REPO_NAME: ${{ github.repository }}
+      WORKFLOW_NAME: ${{ github.workflow }}
+      DEFAULT_BRANCH: "main"
+
+    steps:
+      - name: Log Global Environment Variables
+        run: |
+          echo "GLOBAL_VAR: ${{ env.GLOBAL_VAR }}"
+          echo "REPO_NAME: ${{ env.REPO_NAME }}"
+          echo "WORKFLOW_NAME: ${{ env.WORKFLOW_NAME }}"
+          echo "DEFAULT_BRANCH: ${{ env.DEFAULT_BRANCH }}"
+
+      - name: Override Global Variables Locally
+        env:
+          GLOBAL_VAR: "actual"
+          LOCAL_VAR: "local"
+          RUN_ID: ${{ github.run_id }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+        run: |
+          echo "GLOBAL_VAR: ${{ env.GLOBAL_VAR }}"
+          echo "LOCAL_VAR: ${{ env.LOCAL_VAR }}"
+          echo "RUN_ID: ${{ env.RUN_ID }}"
+          echo "TRIGGERING_ACTOR: ${{ env.TRIGGERING_ACTOR }}"
+
+     
