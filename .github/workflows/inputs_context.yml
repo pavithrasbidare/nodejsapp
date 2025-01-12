@@ -1,0 +1,44 @@
+name: Example Workflow with Inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        required: true
+        default: 'staging'
+      version:
+        description: 'The version of the app'
+        required: true
+        default: '1.0.0'
+      deploy:
+        description: 'Set to true if you want to deploy'
+        required: false
+        default: 'false'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set environment variables
+        run: |
+          echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+          echo "App version: ${{ github.event.inputs.version }}"
+          echo "Deploy: ${{ github.event.inputs.deploy }}"
+          echo "DEPLOY_ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          echo "APP_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      - name: Deploy to environment
+        if: ${{ github.event.inputs.deploy == 'true' }}
+        run: |
+          echo "Starting deployment to ${{ github.event.inputs.environment }}..."
+          # Add actual deployment commands here
+          
+      - name: Skip Deployment
+        if: ${{ github.event.inputs.deploy == 'false' }}
+        run: |
+          echo "Skipping deployment because deploy is set to false"
