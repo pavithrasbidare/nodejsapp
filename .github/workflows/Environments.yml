@@ -75,4 +75,8 @@ jobs:
       - name: Deploy to Environment
         run: |
           echo "Deploying application to ${{ github.event.inputs.environment }}"
+          echo "Staging env api_password::${{ secrets.API_PASSWORD_STG }}"
+          echo "staging env api_key::${{ vars.API_KEY_STG }}"
+          echo "development env api_password::${{ secrets.API_PASSWORD_DEV }}"
+          echo "development env api_key::${{ vars.API_KEY_DEV }}"
           echo "Deployment successful!"
