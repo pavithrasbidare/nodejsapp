@@ -27,9 +27,11 @@ jobs:
           if [[ "${{ github.event.inputs.environment }}" == "development" ]]; then
             echo "::set-output name=api_password::${{ secrets.API_PASSWORD_DEV }}"
             echo "::set-output name=api_key::${{ vars.API_KEY_DEV }}"
+            echo "::add-mask::${{ secrets.API_PASSWORD_DEV }}
           elif [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
             echo "::set-output name=api_password::${{ secrets.API_PASSWORD_STG }}"
             echo "::set-output name=api_key::${{ vars.API_KEY_STG }}"
+            echo "::add-mask::${{ secrets.API_PASSWORD_STG }}
           fi
 
       - name: Confirm environment setup
