@@ -1,0 +1,94 @@
+name: Multi-Event Workflow
+
+on:
+  branch_protection_rule:
+    types: [created, deleted, edited]
+  check_run:
+    types: [created, completed, rerequested, requested_action]
+  check_suite:
+    types: [completed, requested, rerequested]
+  create:
+  delete:
+  deployment:
+  deployment_status:
+  discussion:
+    types: [created, edited, deleted, answered, unanswered, labeled, unlabeled]
+  discussion_comment:
+    types: [created, edited, deleted]
+  fork:
+  gollum:
+  issue_comment:
+    types: [created, edited, deleted]
+  issues:
+    types: [opened, edited, deleted, transferred, closed, reopened, assigned, unassigned, labeled, unlabeled]
+  label:
+    types: [created, edited, deleted]
+  merge_group:
+    types: [checks_requested]
+  milestone:
+    types: [created, closed, opened, edited, deleted]
+  page_build:
+  public:
+  pull_request:
+    types: [opened, edited, closed, reopened, assigned, unassigned, review_requested, review_request_removed]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
+  pull_request_target:
+    types: [opened, edited, closed, reopened, assigned, unassigned, review_requested, review_request_removed]
+  push:
+  registry_package:
+    types: [published, updated]
+  release:
+    types: [published, unpublished, created, edited, deleted, prereleased, released]
+  repository_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+  status:
+  watch:
+    types: [started]
+  workflow_call:
+  workflow_dispatch:
+  workflow_run:
+    types: [completed, requested, in_progress]
+
+jobs:
+  handle_event:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log event details
+        run: |
+          echo "Triggered by event: ${{ github.event_name }}"
+          echo "Event details:"
+          echo "${{ toJson(github.event) }}"
+          echo "Activity type: ${{ github.event.action }}"
+
+      # Conditional logic for activity types
+      - name: Branch Protection Rule Event
+        if: ${{ github.event_name == 'branch_protection_rule' }}
+        run: echo "Handling branch protection rule event: ${{ github.event.action }}"
+
+      - name: Check Run Event
+        if: ${{ github.event_name == 'check_run' }}
+        run: echo "Handling check run event: ${{ github.event.action }}"
+
+      - name: Check Suite Event
+        if: ${{ github.event_name == 'check_suite' }}
+        run: echo "Handling check suite event: ${{ github.event.action }}"
+
+      - name: Deployment Event
+        if: ${{ github.event_name == 'deployment' }}
+        run: echo "Handling deployment event"
+
+      - name: Pull Request Event
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo "Handling pull request event: ${{ github.event.action }}"
+
+      - name: Release Event
+        if: ${{ github.event_name == 'release' }}
+        run: echo "Handling release event: ${{ github.event.action }}"
