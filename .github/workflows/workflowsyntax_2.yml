@@ -42,6 +42,7 @@ on:
     outputs:
       result_message:
         description: "Result message from the workflow"
+        value: ${{ jobs.workflow_call_demo.outputs.result_message }}
     secrets:
       API_TOKEN:
         required: true
