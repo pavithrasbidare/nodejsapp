@@ -50,8 +50,8 @@ on:
       - workflow_syantax1.yml
     branches:
       - main
-    branches-ignore:
-      - 'docs/**'
+    #branches-ignore:
+    #  - 'docs/**'
 
 permissions:
   contents: read
