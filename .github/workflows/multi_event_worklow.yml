@@ -2,21 +2,24 @@ name: Multi-Event Workflow
 
 on:
   branch_protection_rule:
-    types: [created, deleted, edited]
+    types:
+     - created
+     - deleted
+     - edited
   check_run:
     types: [created, completed, rerequested, requested_action]
   check_suite:
     types: [completed, requested, rerequested]
-  create:
-  delete:
-  deployment:
-  deployment_status:
+  create: {}
+  delete: {}
+  deployment: {}
+  deployment_status: {}
   discussion:
     types: [created, edited, deleted, answered, unanswered, labeled, unlabeled]
   discussion_comment:
     types: [created, edited, deleted]
-  fork:
-  gollum:
+  fork: {}
+  gollum: {}
   issue_comment:
     types: [created, edited, deleted]
   issues:
@@ -27,8 +30,8 @@ on:
     types: [checks_requested]
   milestone:
     types: [created, closed, opened, edited, deleted]
-  page_build:
-  public:
+  page_build: {}
+  public: {}
   pull_request:
     types: [opened, edited, closed, reopened, assigned, unassigned, review_requested, review_request_removed]
   pull_request_review:
@@ -37,19 +40,19 @@ on:
     types: [created, edited, deleted]
   pull_request_target:
     types: [opened, edited, closed, reopened, assigned, unassigned, review_requested, review_request_removed]
-  push:
+  push: {}
   registry_package:
     types: [published, updated]
   release:
     types: [published, unpublished, created, edited, deleted, prereleased, released]
-  repository_dispatch:
-  schedule:
-    - cron: "0 0 * * *"
-  status:
+  repository_dispatch: {}
+  #schedule:
+  #  - cron: "0 0 * * *"
+  status: {}
   watch:
     types: [started]
-  workflow_call:
-  workflow_dispatch:
+  workflow_call: {}
+  workflow_dispatch: {}
   workflow_run:
     types: [completed, requested, in_progress]
 
@@ -66,20 +69,26 @@ jobs:
           echo "Triggered by event: ${{ github.event_name }}"
           echo "Event details:"
           echo "${{ toJson(github.event) }}"
-          echo "Activity type: ${{ github.event.action }}"
+          echo "Activity type: ${{ github.event.action || 'No action available' }}"
 
       # Conditional logic for activity types
       - name: Branch Protection Rule Event
         if: ${{ github.event_name == 'branch_protection_rule' }}
-        run: echo "Handling branch protection rule event: ${{ github.event.action }}"
+        run: |
+          echo "Handling branch protection rule event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
 
       - name: Check Run Event
         if: ${{ github.event_name == 'check_run' }}
-        run: echo "Handling check run event: ${{ github.event.action }}"
+        run: |
+          echo "Handling check run event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
 
       - name: Check Suite Event
         if: ${{ github.event_name == 'check_suite' }}
-        run: echo "Handling check suite event: ${{ github.event.action }}"
+        run: |
+          echo "Handling check suite event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
 
       - name: Deployment Event
         if: ${{ github.event_name == 'deployment' }}
@@ -87,8 +96,35 @@ jobs:
 
       - name: Pull Request Event
         if: ${{ github.event_name == 'pull_request' }}
-        run: echo "Handling pull request event: ${{ github.event.action }}"
+        run: |
+          echo "Handling pull request event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
 
       - name: Release Event
         if: ${{ github.event_name == 'release' }}
-        run: echo "Handling release event: ${{ github.event.action }}"
+        run: |
+          echo "Handling release event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
+
+      # Handle events that do not have 'action'
+      - name: Fork Event
+        if: ${{ github.event_name == 'fork' }}
+        run: echo "Handling fork event"
+
+      - name: Gollum Event
+        if: ${{ github.event_name == 'gollum' }}
+        run: |
+          echo "Handling gollum event"
+          echo "Action: ${{ github.event.pages[0].action || 'No action available' }}"
+
+      - name: Issue Comment Event
+        if: ${{ github.event_name == 'issue_comment' }}
+        run: |
+          echo "Handling issue comment event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
+
+      - name: Issues Event
+        if: ${{ github.event_name == 'issues' }}
+        run: |
+          echo "Handling issues event"
+          echo "Action: ${{ github.event.action || 'No action available' }}"
