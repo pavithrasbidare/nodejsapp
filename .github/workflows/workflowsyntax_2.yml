@@ -61,10 +61,10 @@ permissions:
 env:
   GLOBAL_ENV_VAR: "test"
 
-defaults:
-  run:
-    shell: bash
-    working-directory: scripts
+#defaults:
+#  run:
+#    shell: bash
+#    working-directory: scripts
 
 concurrency:
   group: workflow_group
