@@ -10,16 +10,16 @@ on:
     tags:
       - 'v*'
       - 'release-*'
-    branches-ignore:
-      - 'test/*'
+    #branches-ignore:
+    #  - 'test/*'
     #tags-ignore:
     #  - 'beta-*'
     paths:
       - 'src/**'
       - 'lib/**'
-    paths-ignore:
-      - 'docs/**'
-      - '*.md'
+    #paths-ignore:
+    #  - 'docs/**'
+    #  - '*.md'
   pull_request:
     types:
       - opened
@@ -28,8 +28,8 @@ on:
     branches:
       - main
       - feature/*
-    branches-ignore:
-      - 'test/*'
+    #branches-ignore:
+    #  - 'test/*'
   #schedule:
    # - cron: '0 3 * * *'
 
