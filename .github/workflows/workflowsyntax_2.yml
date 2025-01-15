@@ -1,0 +1,100 @@
+name: Workflow_call example syntax 
+
+run-name: Execute ${{ github.event_name }} Workflow
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+    paths:
+      - 'src/**'
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+      - feature/*
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        type: string
+        default: "staging"
+      version:
+        description: "Version to deploy"
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      trigger_by:
+        description: "Triggering job or workflow"
+        required: true
+        type: string
+      reason:
+        description: "Reason for triggering"
+        required: false
+        type: string
+    outputs:
+      result_message:
+        description: "Result message from the workflow"
+    secrets:
+      API_TOKEN:
+        required: true
+  workflow_run:
+    workflows:
+      - workflow_syantax1.yml
+    branches:
+      - main
+    branches-ignore:
+      - 'docs/**'
+
+permissions:
+  contents: read
+  actions: write
+
+env:
+  GLOBAL_ENV_VAR: "test"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: scripts
+
+concurrency:
+  group: workflow_group
+  cancel-in-progress: true
+
+jobs:
+  workflow_call_demo:
+    name: Workflow Call Demonstration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Inputs
+        run: |
+          echo "Triggered by: ${{ inputs.trigger_by }}"
+          echo "Reason: ${{ inputs.reason }}"
+      - name: Set Output
+        run: echo "result_message=Workflow executed successfully" >> $GITHUB_ENV
+
+  dispatch_demo:
+    name: Workflow Dispatch Demonstration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Dispatch Inputs
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Version: ${{ github.event.inputs.version }}"
+  
+  workflow_run_demo:
+    name: Workflow Run Demonstration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Workflow Run Info
+        run: |
+          echo "This workflow was triggered by a workflow_run event."
