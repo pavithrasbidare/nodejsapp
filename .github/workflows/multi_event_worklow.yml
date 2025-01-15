@@ -53,8 +53,6 @@ on:
     types: [started]
   workflow_call: {}
   workflow_dispatch: {}
-  workflow_run:
-    types: [completed, requested, in_progress]
 
 jobs:
   handle_event:
