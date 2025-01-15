@@ -85,36 +85,36 @@ jobs:
         run: |
           echo "Running tests for OS: ${{ matrix.os }} on Node.js: ${{ matrix.node }}"
           
-  docker-login:
-    runs-on: ubuntu-latest
+ # docker-login:
+ #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+ #   steps:
+ #     - name: Checkout Code
+ #       uses: actions/checkout@v3
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin        
+ #     - name: Log in to Docker Hub
+ #       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin        
 
-  container-job:
-    name: Containerized Job
-    runs-on: ubuntu-latest
-    container:
-      image: node:16
-      credentials:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-      env:
-        NODE_ENV: "production"
-      ports:
-        - 8080:80
-      volumes:
-        - /cache:/tmp/cache
-      options: --entrypoint "/bin/bash"
-    steps:
-      - name: Run inside container
-        run: |
-          echo "Container-based job running Node.js application"
-        shell: sh
+ # container-job:
+ #   name: Containerized Job
+ #   runs-on: ubuntu-latest
+ #   container:
+ #     image: node:16
+ #     credentials:
+ #       username: ${{ secrets.DOCKER_USERNAME }}
+ #       password: ${{ secrets.DOCKER_PASSWORD }}
+ #     env:
+ #       NODE_ENV: "production"
+ #     ports:
+ #       - 8080:80
+ #     volumes:
+ #      - /cache:/tmp/cache
+ #     options: --entrypoint "/bin/bash"
+ #   steps:
+ #     - name: Run inside container
+ #       run: |
+ #         echo "Container-based job running Node.js application"
+ #       shell: sh
 
   service-job:
     name: PostgreSQL Service Job
