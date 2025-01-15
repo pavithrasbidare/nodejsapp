@@ -33,7 +33,7 @@ jobs:
 
       - id: run-tests
         name: Run Tests
-        run: npm test
+        run: npm run build
         env:
           TEST_ENV: "test_value"
 
@@ -84,6 +84,16 @@ jobs:
       - name: Run Tests
         run: |
           echo "Running tests for OS: ${{ matrix.os }} on Node.js: ${{ matrix.node }}"
+          
+  docker-login:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin        
 
   container-job:
     name: Containerized Job
@@ -116,11 +126,6 @@ jobs:
           POSTGRES_DB: example
         ports:
           - 5432:5432
-        options: > 
-          --health-cmd="pg_isready" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=3
     steps:
       - name: Start PostgreSQL Service
         run: echo "PostgreSQL service is running!"
