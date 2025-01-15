@@ -12,8 +12,8 @@ on:
       - 'release-*'
     branches-ignore:
       - 'test/*'
-    tags-ignore:
-      - 'beta-*'
+    #tags-ignore:
+    #  - 'beta-*'
     paths:
       - 'src/**'
       - 'lib/**'
