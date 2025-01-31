@@ -1,0 +1,44 @@
+name: Build and Store Node.js Application Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: 'Node.js version'
+        required: true
+        default: '16'
+      build-command:
+        description: 'Build command'
+        required: true
+        default: 'npm run build'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set Up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ github.event.inputs.node-version }}
+
+    - name: Install Dependencies
+      run: |
+        npm install
+
+    - name: Build Application
+      run: ${{ github.event.inputs.build-command }}
+
+    - name: Package Application
+      run: |
+        mkdir -p artifacts
+        cp dist/* artifacts/node_app.zip
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: node-application-artifact
+        path: artifacts/node_app.zip
