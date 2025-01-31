@@ -1,4 +1,4 @@
-name: Build and Store Node.js Application Artifacts
+name: Inputs Build and Store Node.js Application Artifacts
 
 on:
   workflow_dispatch:
