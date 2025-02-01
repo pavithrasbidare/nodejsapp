@@ -1,0 +1,19 @@
+name: Runner Context Example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Display runner information
+        run: |
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner Architecture: ${{ runner.arch }}"
+          echo "Runner Name: ${{ runner.name }}"
+          echo "Temporary Directory: ${{ runner.temp }}"
+          echo "Tool Cache Directory: ${{ runner.tool_cache }}"
